@@ -23,6 +23,34 @@ GPIO.setup(LED_PIN, GPIO.OUT)  # LED pin set as output
 # Get today's date in the format XX/XX/XXXX
 today_date = datetime.datetime.now().strftime("%m/%d/%Y")
 
+# Audio recording parameters
+capture_device_index = 0
+FORMAT = pyaudio.paInt16
+CHANNELS = 1
+RATE = 44100
+CHUNK = 128
+WAVE_OUTPUT_FILENAME = "file.wav"
+
+# Initialize PyAudio
+audio = pyaudio.PyAudio()
+
+# Recording flag and frames buffer
+is_recording = False
+frames = []
+
+# OpenAI API key
+api_key = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'  # Replace with your actual API key
+client = OpenAI(api_key=api_key)
+
+# Define the system message
+initial_system_message = {
+    "role": "system",
+    "content": "You are a voice assistant. Your objective is to answer questions accrautely and to be enjoyable to talk to."
+}
+
+# Global variable to hold conversation state
+conversation_history = [initial_system_message]
+
 
 # Error sound if something goes wrong
 def play_error_sound():
@@ -51,39 +79,6 @@ def blink_led():
         time.sleep(0.5)  # On for 0.5 seconds
         GPIO.output(LED_PIN, GPIO.LOW)
         time.sleep(0.5)  # Off for 0.5 seconds
-
-# Setup GPIO
-GPIO.setmode(GPIO.BCM)  # Use Broadcom pin-numbering scheme
-GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Button pin set as input
-GPIO.setup(LED_PIN, GPIO.OUT)  # LED pin set as output
-
-# Audio recording parameters
-capture_device_index = 0
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 44100
-CHUNK = 128
-WAVE_OUTPUT_FILENAME = "file.wav"
-
-# Initialize PyAudio
-audio = pyaudio.PyAudio()
-
-# Recording flag and frames buffer
-is_recording = False
-frames = []
-
-# OpenAI API key
-api_key = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'  # Replace with your actual API key
-client = OpenAI(api_key=api_key)
-
-# Define the system message
-initial_system_message = {
-    "role": "system",
-    "content": "You are a voice assistant. Your objective is to answer questions accrautely and to be enjoyable to talk to."
-}
-
-# Global variable to hold conversation state
-conversation_history = [initial_system_message]
 
 # Function to record audio
 def record_audio():
