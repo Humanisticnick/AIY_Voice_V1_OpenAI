@@ -17,22 +17,28 @@ Requirements:
     Another computer to SSH into the Pi
 
 Install process:
-1) Use the Raspberry Pi Imager to pick up the lite bullseye image and flash it to your microsdcard. Make sure you add your wifi information, create a user, set a password, and enable ssh
-2) Pick a software to connect to the Raspberry PI, I like VsCode but you can use putty too
-3) SSH into you Pi and run some commands
-4) Update and upgrade packages, configure sound card, install dependencies
+# 1) Use the Raspberry Pi Imager to pick up the lite bullseye image and flash it to your microsdcard. Make sure you add your wifi information, create a user, set a password, and enable ssh
+# 2) Pick a software to connect to the Raspberry PI, I like VsCode but you can use putty too
+# 3) SSH into you Pi and run some commands
+# 4) Update and upgrade packages, configure sound card, install dependencies
 sudo apt-get update
 sudo apt-get upgrade -y
 echo "dtoverlay=googlevoicehat-soundcard" | sudo tee -a /boot/config.txt
 sudo apt install python3-pip build-essential libssl-dev libffi-dev libportaudio2 git -y
 
-# Reboot after installation and configuration
+# 5) Reboot after installation and configuration
 sudo reboot
 
-# 5) Clone the git repository
+# 6) Clone the git repository
 git clone https://github.com/Humanisticnick/AIY_Voice_V1_OpenAI.git AIY_Voice_V1_OpenAI
 
-# 6) Create a systemd service for the script
+# 7) Nano into the script and put in your openapi api key
+nano ~/AIY_Voice_V1_OpenAI/current.py
+*once in there scroll down till you see the api key and replace it with your own*
+ctrl X, enter
+
+
+# 7) Create a systemd service for the script
 cat <<EOF | sudo tee /etc/systemd/system/my_script.service > /dev/null
 [Unit]
 Description=My Python Script Service
@@ -49,9 +55,9 @@ Restart=on-failure
 WantedBy=multi-user.target
 EOF
 
-# Reload systemd to recognize the new service and enable it
+# 8) Reload systemd to recognize the new service and enable it
 sudo systemctl daemon-reload
 sudo systemctl enable my_script.service 
 
-# Optional: Reboot the system to start the service, uncomment if needed
-# sudo reboot now
+# 9) Reboot the system to start the service, 
+sudo reboot now
