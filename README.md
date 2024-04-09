@@ -20,3 +20,38 @@ Install process:
 1) Use the Raspberry Pi Imager to pick up the lite bullseye image and flash it to your microsdcard. Make sure you add your wifi information, create a user, set a password, and enable ssh
 2) Pick a software to connect to the Raspberry PI, I like VsCode but you can use putty too
 3) SSH into you Pi and run some commands
+4) Update and upgrade packages, configure sound card, install dependencies
+sudo apt-get update
+sudo apt-get upgrade -y
+echo "dtoverlay=googlevoicehat-soundcard" | sudo tee -a /boot/config.txt
+sudo apt install python3-pip build-essential libssl-dev libffi-dev libportaudio2 git -y
+
+# Reboot after installation and configuration
+sudo reboot
+
+# 5) Clone the git repository
+git clone https://github.com/Humanisticnick/AIY_Voice_V1_OpenAI.git AIY_Voice_V1_OpenAI
+
+# 6) Create a systemd service for the script
+cat <<EOF | sudo tee /etc/systemd/system/my_script.service > /dev/null
+[Unit]
+Description=My Python Script Service
+After=network.target
+
+[Service]
+Type=simple
+User=$USER
+WorkingDirectory=/home/$USER
+ExecStart=/usr/bin/python3 /home/$USER/AIY_Voice_V1_OpenAI/current.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload systemd to recognize the new service and enable it
+sudo systemctl daemon-reload
+sudo systemctl enable my_script.service 
+
+# Optional: Reboot the system to start the service, uncomment if needed
+# sudo reboot now
