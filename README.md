@@ -25,6 +25,7 @@ sudo apt-get update
 sudo apt-get upgrade -y
 echo "dtoverlay=googlevoicehat-soundcard" | sudo tee -a /boot/config.txt
 sudo apt install python3-pip build-essential libssl-dev libffi-dev libportaudio2 git portaudio19-dev -y
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
 pip3 install pyaudio openai
 
 # 5) Reboot after installation and configuration
