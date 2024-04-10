@@ -24,7 +24,7 @@ Install process:
 sudo apt-get update
 sudo apt-get upgrade -y
 echo "dtoverlay=googlevoicehat-soundcard" | sudo tee -a /boot/config.txt
-sudo apt install python3-pip build-essential libssl-dev libffi-dev libportaudio2 git -y
+sudo apt install python3-pip build-essential libssl-dev libffi-dev libportaudio2 git portaudio19-dev -y
 
 # 5) Reboot after installation and configuration
 sudo reboot
